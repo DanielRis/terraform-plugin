@@ -210,10 +210,11 @@ public class TerraformBuildWrapper extends BuildWrapper {
         String executable = getExecutable(env, listener, launcher);
         args.add(executable);
 
-        args.add("get");
+        args.add("init");
 
-        if (doGetUpdate) {
-            args.add("-update");
+        if (!isNullOrEmpty(getVariables())) {
+            variablesFile = workingDirectory.createTextTempFile("variables", ".tfvars", evalEnvVars(getVariables(), env));
+            args.add("-var-file="+variablesFile.getRemote());
         }
 
         LOGGER.info("Launching Terraform Get: "+args.toString());
@@ -240,6 +241,8 @@ public class TerraformBuildWrapper extends BuildWrapper {
             variablesFile = workingDirectory.createTextTempFile("variables", ".tfvars", evalEnvVars(getVariables(), env));
             args.add("-var-file="+variablesFile.getRemote());
         }
+
+        args.add("-auto-approve=true");
 
         LOGGER.info("Launching Terraform Apply: "+args.toString());
 

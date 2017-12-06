@@ -4,3 +4,7 @@ target/
 .gradle/
 .DS_Store
 .idea/
+bin/
+.settings/
+.classpath
+.project
